@@ -12,8 +12,8 @@ Build
 -----
 
 compile: ```./sbt compile```
+
 test: ```./sbt test```
-single jar: ```./sbt assembly```
 
 Usage
 -----

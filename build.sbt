@@ -1,5 +1,3 @@
-import AssemblyKeys._ // put this at the top of the file
-
 name := "scala-ledger"
 
 version := "1.0-SNAPSHOT"
@@ -27,11 +25,5 @@ libraryDependencies ++= Seq(
     "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
 )
 
-mainClass := Some("org.vvcephei.banketl.ETL")
-
 net.virtualvoid.sbt.graph.Plugin.graphSettings
-
-assemblySettings
-
-mainClass in assembly := Some("org.vvcephei.banketl.ETL")
 
