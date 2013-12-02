@@ -4,8 +4,7 @@ import scala.io.Source
 import org.scalatest.FunSuite
 
 class LedgerDataFileParserTest extends FunSuite {
-  val demoLoaded = Source.fromURL(getClass.getResource("demo.ledger")).getLines()
-
+  val demoLoaded = Source.fromURL(getClass.getResource("ldemo.dat")).getLines()
 
   test("parseDemo") {
     val parse: Ledger = LedgerDataFileParser.parse(demoLoaded)
