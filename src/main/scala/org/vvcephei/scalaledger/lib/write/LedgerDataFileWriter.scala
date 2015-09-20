@@ -2,56 +2,42 @@ package org.vvcephei.scalaledger.lib.write
 
 import java.io.{FileWriter, File}
 import org.vvcephei.scalaledger.lib.model._
-import org.joda.time.format.DateTimeFormat
-import org.vvcephei.scalaledger.lib.model.Comment
-import org.vvcephei.scalaledger.lib.model.LedgerTransaction
-import org.vvcephei.scalaledger.lib.model.PeriodTransaction
+import org.vvcephei.scalaledger.lib.util.Formatters
 
 case class LedgerDataFileWriter(f: File, append: Boolean = true) {
   private val writer = new FileWriter(f, append)
 
-  private val df = DateTimeFormat.forPattern("YYYY/MM/dd")
+  private[this] def format(ledger: Ledger): String = ledger.transactions.map(format).mkString("\n\n") + "\n"
 
-  private def formatComment(cs: List[String]) = cs map { "; " + _ } mkString "\n"
+  private[this] def format(transaction: Transaction): String =
+    transaction.comment.map("; " + _).mkString("\n") + "\n" +
+      format(transaction.transactionStart) + "\n" +
+      transaction.postings.flatMap(_.fold("; " + _, format)).mkString("\n") + "\n"
 
-  private def moneyFormatter(amt: Double) = "$%.2f".format(amt).replace("$-", "-$")
+  private[this] def format(posting: Posting): String =
+    "    " +
+      (f"${posting.marker.map(_ + " ").getOrElse("") }${posting.account }%-40s  " +
+        s"${posting.quantity.map(format).getOrElse("") } " +
+        s"${posting.comment.map("; " + _).getOrElse("") }").trim
 
-  private def formatPosting(p: Posting, indent: String) = p.account + (p.amount map { a=> "\t" + moneyFormatter(a) } getOrElse "") +
-    (p.notes match {
-      case Nil => ""
-      case n :: Nil => "\t; " + n
-      case n :: l => "\t; " + n + "\n" + (l map { indent + "; " + _ } mkString "\n")
-    })
+  private[this] def format(quantity: Quantity): String =
+    s"${if (quantity.amount < 0) "-" else "" }${quantity.currency}${Formatters.decForm.format(quantity.amount.abs) }"
 
-  private def formatLT(lt: LedgerTransaction) = {
-    val head = df.print(lt.date) + lt.marker.map("\t" + _).getOrElse("") + lt.code.map("\t(" + _ + ")").getOrElse("") + "\t" + lt.description
-    val notes = lt.notes map { "\t; " + _ } mkString "\n"
-    val postings = lt.postings map { p => "\t" + formatPosting(p, "\t") } mkString "\n"
+  private[this] def format(transactionStart: TransactionStart): String =
+    Formatters.dateForm.print(transactionStart.date) +
+      transactionStart.marker.map(" " + _).getOrElse("") +
+      transactionStart.code.map(" (" + _ + ")").getOrElse("") +
+      s" ${transactionStart.description}" +
+      transactionStart.comment.map(" ; " + _).getOrElse("")
 
-    val notesBlock = if (notes == "") "" else "\n" + notes
-    val postingsBlock = if (postings == "") "" else "\n" + postings
-
-    head + notesBlock + postingsBlock
-  }
-
-  private def formatPT(pt: PeriodTransaction) = {
-    val head = "~\t" + pt.period
-    val notes = pt.notes map { "\t; " + _ } mkString "\n"
-    val postings = pt.postings map { p => "\t" + formatPosting(p, "\t") } mkString "\n"
-
-    val notesBlock = if (notes == "") "" else "\n" + notes
-    val postingsBlock = if (postings == "") "" else "\n" + postings
-
-    head + notesBlock + postingsBlock
-  }
-
-  def write(item: LedgerItem) = {
-    writer.write("\n" + (item match {
-      case Comment(cs) => formatComment(cs)
-      case lt: LedgerTransaction => formatLT(lt)
-      case pt: PeriodTransaction => formatPT(pt)
-    }) + "\n")
+  def write(ledger: Ledger) = {
+    writer.write(format(ledger))
     writer.flush()
+  }
+
+  def write(transaction: Transaction) = {
+    writer.write("\n")
+    writer.write(format(transaction))
   }
 
   def close() = writer.close()
