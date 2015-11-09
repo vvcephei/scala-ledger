@@ -8,6 +8,8 @@ scalaVersion := "2.11.7"
 
 crossScalaVersions := Seq("2.10.5", "2.11.7")
 
+scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
+
 libraryDependencies ++= Seq(
   "org.apache.httpcomponents" % "httpclient" % "4.2.1",
   "com.sun.jersey" % "jersey-core" % "1.17.1",

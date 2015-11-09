@@ -239,7 +239,9 @@ class LedgerParserTest extends FunSuite {
     val source = Source.fromURL(resource).bufferedReader()
     val result: InternalLedgerParser.ParseResult[Ledger] = parseAll(ledger, source)
 
-    println(result)
-    assert(result.get === ldemo.ledgerAST)
+    result  match {
+      case Success(s, y) => assert(s === ldemo.ledgerAST)
+      case o => fail(o.toString)
+    }
   }
 }

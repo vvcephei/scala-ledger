@@ -7,6 +7,8 @@ import org.vvcephei.scalaledger.lib.util.Formatters
 
 import scala.util.parsing.combinator.RegexParsers
 
+import scala.language.postfixOps
+
 object InternalLedgerParser extends RegexParsers {
 
   override def skipWhitespace = false
