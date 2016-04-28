@@ -4,9 +4,7 @@ organization := "org.vvcephei"
 
 version := "1.1-SNAPSHOT"
 
-scalaVersion := "2.11.7"
-
-crossScalaVersions := Seq("2.10.5", "2.11.7")
+scalaVersion := "2.11.8"
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
