@@ -2,7 +2,7 @@ name := "scala-ledger"
 
 organization := "org.vvcephei"
 
-version := "1.1-SNAPSHOT"
+version := "2.0"
 
 scalaVersion := "2.11.8"
 
@@ -46,7 +46,7 @@ publishArtifact in Test := false
 
 pomIncludeRepository := { _ => false }
 
-pomExtra := (
+pomExtra :=
   <url>https://github.com/vvcephei/scala-ledger</url>
     <licenses>
       <license>
@@ -65,6 +65,6 @@ pomExtra := (
         <name>John Roesler</name>
         <url>http://www.vvcephei.org</url>
       </developer>
-    </developers>)
+    </developers>
 
 
