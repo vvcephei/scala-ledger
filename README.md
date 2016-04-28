@@ -8,6 +8,8 @@ I wrote it to support another project of mine, but I'd be happy to maintain it i
 Build
 -----
 
+[![Build Status](https://travis-ci.org/vvcephei/scala-ledger.svg?branch=master)](https://travis-ci.org/vvcephei/scala-ledger)
+
 compile: ```sbt compile```
 
 test: ```sbt test```
