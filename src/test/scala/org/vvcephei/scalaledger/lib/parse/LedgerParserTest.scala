@@ -1,5 +1,7 @@
 package org.vvcephei.scalaledger.lib.parse
 
+import java.io.File
+
 import org.joda.time.DateTime
 import org.scalatest.FunSuite
 import org.vvcephei.scalaledger.lib.model._
@@ -113,7 +115,43 @@ class LedgerParserTest extends FunSuite {
   test("stock") {
     parseAll(posting, "     Assets:Broker                       250 STK @ $20.00") match {
       case Success(s, y) =>
-        assert(s === Posting(None, "Assets:Broker", Some(Quantity("STK", 250)), Some(Price("$",20.0)), None))
+        assert(s === Posting(None, "Assets:Broker", Some(Quantity("STK", 250)), Some(Price("$", 20.0)), None))
+      case f => fail(f.toString)
+    }
+  }
+
+  test("sell stock"){
+    parseAll(transaction, "2011/12/14  Sell Stocks\n" +
+      "  Assets:Broker                       -75 STOKA @ $40.24\n" +
+      "  Expenses:Trading                    $7.07\n" +
+      "  Assets:Broker                       $3010.93\n") match {
+      case Success(s,y) =>
+        assert(s === Transaction(
+          List(),
+          TransactionStart(new DateTime(2011, 12, 14, 0, 0), None, None, "Sell Stocks", None),
+          List(
+            Right(Posting(None, "Assets:Broker", Some(Quantity("STOKA", -75)), Some(Price("$",40.24)), None)),
+            Right(Posting(None, "Expenses:Trading", Some(Quantity("$", 7.07)), None, None)),
+            Right(Posting(None, "Assets:Broker", Some(Quantity("$", 3010.93)), None, None))
+          )))
+      case f => fail(f.toString)
+    }
+  }
+
+  test("buy stock") {
+    parseAll(transaction, "2011/12/15 Buy Stocks\n" +
+      "  Assets:Broker                       11 STOKB @ $260\n" +
+      "  Expenses:Trading                    $7.00\n" +
+      "  Assets:Broker                       -$2867\n") match {
+      case Success(s,y) =>
+        assert(s === Transaction(
+          List(),
+          TransactionStart(new DateTime(2011, 12, 15, 0, 0), None, None, "Buy Stocks", None),
+          List(
+            Right(Posting(None, "Assets:Broker", Some(Quantity("STOKB", 11)), Some(Price("$",260)), None)),
+            Right(Posting(None, "Expenses:Trading", Some(Quantity("$", 7.00)), None, None)),
+            Right(Posting(None, "Assets:Broker", Some(Quantity("$", -2867)), None, None))
+          )))
       case f => fail(f.toString)
     }
   }

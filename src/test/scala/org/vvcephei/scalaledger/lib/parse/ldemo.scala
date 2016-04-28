@@ -135,7 +135,23 @@ object ldemo {
           TransactionStart(dt(2011, 12, 1), None, None, "Sale", None),
           List(
             Right(Posting(None, "Assets:Checking", Some(Quantity("$", 3000.0)), None, None)),
-            Right(Posting(None, "Income:Sales and Stuff", None, None, None))))
+            Right(Posting(None, "Income:Sales and Stuff", None, None, None)))),
+        Transaction(
+          List(),
+          TransactionStart(dt(2011, 12, 14), None, None, "Sell Stocks", None),
+          List(
+            Right(Posting(None, "Assets:Broker", Some(Quantity("STOKA", -75)), Some(Price("$",40.24)), None)),
+            Right(Posting(None, "Expenses:Trading", Some(Quantity("$", 7.07)), None, None)),
+            Right(Posting(None, "Assets:Broker", Some(Quantity("$", 3010.93)), None, None))
+          )),
+        Transaction(
+          List(),
+          TransactionStart(dt(2011, 12, 15), None, None, "Buy Stocks", None),
+          List(
+            Right(Posting(None, "Assets:Broker", Some(Quantity("STOKB", 11)), Some(Price("$",260)), None)),
+            Right(Posting(None, "Expenses:Trading", Some(Quantity("$", 7.00)), None, None)),
+            Right(Posting(None, "Assets:Broker", Some(Quantity("$", -2867)), None, None))
+          ))
       )
     )
 }

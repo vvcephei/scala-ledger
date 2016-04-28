@@ -3,17 +3,14 @@ scala-ledger
 
 A JVM library for reading and writing Ledger data files (http://www.ledger-cli.org/).
 
-This is an extremely skeletal implementation right now, and assumes that you aren't using any of Ledger's advanced features.
-Also, it assumes you're just using USD ("$") as the currency.
-
 I wrote it to support another project of mine, but I'd be happy to maintain it if it's generally useful.
 
 Build
 -----
 
-compile: ```./sbt compile```
+compile: ```sbt compile```
 
-test: ```./sbt test```
+test: ```sbt test```
 
 Usage
 -----

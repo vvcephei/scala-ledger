@@ -77,3 +77,14 @@
 2011/12/01 Sale
   Assets:Checking                     $ 3000.00
   Income:Sales and Stuff
+
+2011/12/14  Sell Stocks
+  Assets:Broker                       -75 STOKA @ $40.24
+  Expenses:Trading                    $7.07
+  Assets:Broker                       $3010.93
+
+2011/12/15 Buy Stocks
+  Assets:Broker                       11 STOKB @ $260
+  Expenses:Trading                    $7.00
+  Assets:Broker                       -$2867
+
