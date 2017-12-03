@@ -4,7 +4,7 @@ organization := "org.vvcephei"
 
 version := "2.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.4"
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
@@ -13,34 +13,30 @@ libraryDependencies ++= Seq(
   "com.sun.jersey" % "jersey-core" % "1.17.1",
   "com.sun.jersey" % "jersey-client" % "1.17.1",
   "com.sun.jersey" % "jersey-json" % "1.17.1",
-  //"javax.ws.rs" % "jsr311-api" % "1.1.1",
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.6.1",
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.2.3",
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.6.1",
-  "org.joda" % "joda-convert" % "1.2",
-  "joda-time" % "joda-time" % "2.3",
-  "com.github.tototoshi" %% "scala-csv" % "1.2.2",
-  "com.beust" % "jcommander" % "1.30",
-  "org.apache.opennlp" % "opennlp-tools" % "1.5.3",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.2",
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.9.2",
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.9.2",
+  "org.joda" % "joda-convert" % "1.9.2",
+  "joda-time" % "joda-time" % "2.9.9",
+  "com.github.tototoshi" %% "scala-csv" % "1.3.5",
+  "com.beust" % "jcommander" % "1.72",
+  "org.apache.opennlp" % "opennlp-tools" % "1.8.3",
   "org.apache.opennlp" % "opennlp-maxent" % "3.0.3",
-  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
+  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6"
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.2.5" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 )
-
-net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 publishMavenStyle := true
 
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
+publishTo := Some(
+  if (isSnapshot.value)
+    Opts.resolver.sonatypeSnapshots
   else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+    Opts.resolver.sonatypeStaging
+)
 
 publishArtifact in Test := false
 
