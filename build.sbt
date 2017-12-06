@@ -2,7 +2,7 @@ name := "scala-ledger"
 
 organization := "org.vvcephei"
 
-version := "2.1"
+version := "2.2"
 
 scalaVersion := "2.12.4"
 
@@ -20,8 +20,6 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.github.tototoshi" %% "scala-csv" % "1.3.5",
   "com.beust" % "jcommander" % "1.72",
-  "org.apache.opennlp" % "opennlp-tools" % "1.8.3",
-  "org.apache.opennlp" % "opennlp-maxent" % "3.0.3",
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6"
 )
 
