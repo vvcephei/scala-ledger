@@ -7,12 +7,29 @@ import org.vvcephei.scalaledger.lib.util.Formatters
 case class LedgerDataFileWriter(f: File, append: Boolean = true) {
   private val writer = new FileWriter(f, append)
 
-  private[this] def format(ledger: Ledger): String = ledger.transactions.map(format).mkString("\n\n") + "\n"
+  private[write] def format(ledger: Ledger): String = {
+    val budget = ledger.budget.map(format).mkString("\n\n")
+    val transactions = ledger.transactions.map(format).mkString("\n\n")
+    budget + "\n" + transactions + "\n"
+  }
 
-  private[this] def format(transaction: Transaction): String =
-    transaction.comment.map("; " + _).mkString("\n") + "\n" +
-      format(transaction.transactionStart) + "\n" +
-      transaction.postings.flatMap(_.fold("; " + _, format)).mkString("\n") + "\n"
+  private[write] def format(budget: Budget): String = {
+    val comments: String = budget.comment.map("; " + _.comment).mkString("\n")
+    val header: String = format(budget.budgetStart)
+    val chars: List[String] = budget.postings.map(_.fold("; " + _, format))
+    comments + "\n" + header + "\n" + chars.mkString("\n") + "\n"
+  }
+
+  private[this] def format(budgetStart: BudgetStart): String = {
+    s"~ ${budgetStart.period}"
+  }
+
+  private[write] def format(transaction: Transaction): String = {
+    val comments: String = transaction.comment.map("; " + _.comment).mkString("\n")
+    val header: String = format(transaction.transactionStart)
+    val chars: List[String] = transaction.postings.map(_.fold("; " + _, format))
+    comments + "\n" + header + "\n" + chars.mkString("\n") + "\n"
+  }
 
   private[this] def format(posting: Posting): String =
     "    " +
